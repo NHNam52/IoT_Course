@@ -1,0 +1,16 @@
+Cách kết nối MySQL trên PC từ raspberry
+https://webdock.io/en/docs/how-guides/database-guides/how-enable-remote-access-your-mariadbmysql-database
+Bước 1: Trên PC mở terminal, nhập:
+  sudo nano /etc/mysql/mariadb.conf.d/50-server.cnf
+Bước 2: Thay đổi dòng "bind-address = 127.0.0.1" thành "bind-address = 0.0.0.0", sau đó lưu lại file.
+Bước 3: Trên terminal, nhập sudo mysql -u root -p để vào mariaDB. Trong mariaDB nhập dòng code sau:
+     GRANT ALL ON *.* to 'any_account'@'raspberry_ip' IDENTIFIED BY 'password' WITH GRANT OPTION;
+     (vd: GRANT ALL ON *.* to 'pi_sql'@'192.168.0.8' IDENTIFIED BY '123456' WITH GRANT OPTION;)
+     Flush Privileges;
+Thoát ra terminal và restart mariaDB với câu lệnh: sudo systemctl restart mariadb
+Test kết nối: (vd địa chỉ IP của PC là 192.168.0.4)
+  -  Trên raspberry terminal: nhập mysql -u pi_sql -p -h 192.168.0.4 để đăng nhập mysql trên PC
+ -   Trong code C chạy trên rasp: sửa lại code mẫu như sau để kết nối
+              char *server = "192.168.0.4";
+              char *user = "pi_sql";
+              char *password = "123456";
